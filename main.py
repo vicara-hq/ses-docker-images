@@ -19,7 +19,7 @@ SES_DOCKER_REPO = config["segger-studio"]["DockerRepo"]
 LIST_TAGS_URL = "https://registry.hub.docker.com/v1/repositories/{}/tags"
 
 def run_shell_command(command):
-    subprocess.run(command, shell=True)
+    subprocess.run(command, shell=True, check=True)
 
 def build_docker_image(name, download_url):
     logging.info("Building {}".format(name))
