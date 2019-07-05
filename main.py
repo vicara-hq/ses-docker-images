@@ -76,5 +76,4 @@ def main():
     
     map(delete_docker_image, finished_builds)
 
-# main()
-get_ses_downloads()
+main()
