@@ -49,7 +49,7 @@ def get_ses_downloads():
     prev_versions = latest.findNext("tr", class_="prev_versions").find_all("tr", class_="row2")
     for elem in prev_versions:
         link = elem.find("a", class_="btn btn-default")["href"]
-        version = elem.find("td", class_="dl_prev_version").get_text()
+        version = elem.find("td", class_="dl_prev_version").get_text().lstrip("Vv")
         download_link = link
         downloads[version] = download_link
                 
