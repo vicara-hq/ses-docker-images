@@ -46,14 +46,12 @@ def get_ses_downloads():
     latest = downloads_page.find("tr", class_="id_EmbeddedStudio_ARM_Linux_x64")
     latest_version = latest.find("div", class_= "dl_version", text=True).text.lstrip("V")
     downloads[latest_version] = "https://www.segger.com/downloads/embedded-studio/EmbeddedStudio_ARM_Linux_x64"
-
-    for a in downloads_page.find_all("a", href=True):
-        link = a["href"]
-        match = re.search(r"Setup_EmbeddedStudio(_ARM)?_v([a-z0-9]+)_linux_x64.tar.gz$", link, re.IGNORECASE)
-        if match:
-            version = match.group(2).replace("_",".")
-            download_link = link
-            downloads[version] = download_link
+    prev_versions = latest.findNext("tr", class_="prev_versions").find_all("tr", class_="row2")
+    for elem in prev_versions:
+        link = elem.find("a", class_="btn btn-default")["href"]
+        version = elem.find("td", class_="dl_prev_version").get_text()
+        download_link = link
+        downloads[version] = download_link
                 
     logging.info("Found {} versions of ses available".format(len(downloads)))
     return downloads
@@ -78,4 +76,5 @@ def main():
     
     map(delete_docker_image, finished_builds)
 
-main()
+# main()
+get_ses_downloads()
