@@ -1,8 +1,12 @@
-FROM ubuntu:18.04
-ARG download_url
-RUN apt-get -qq update > /dev/null && apt-get -qq install -y libx11-6 libfreetype6 libxrender1 libfontconfig1 libxext6 xvfb curl > /dev/null
-RUN Xvfb :1 -screen 0 1024x768x16 &
-RUN curl ${download_url} -o ses.tar.gz && \
-tar -zxf ses.tar.gz
-COPY run-segger-setup.sh .
-RUN chmod +x run-segger-setup.sh && ./run-segger-setup.sh
+ARG SES_DL=https://www.segger.com/downloads/embedded-studio/Setup_EmbeddedStudio_ARM_v560a_linux_x64.tar.gz
+FROM ubuntu:20.04
+ARG SES_DL
+
+RUN apt-get update
+RUN apt-get install -y wget python3 python3-pip libx11-6 libfreetype6 libxrender1 libfontconfig1 libxext6
+
+RUN wget $SES_DL -O ses.tar.gz
+RUN tar -zvxf ses.tar.gz
+RUN echo "yes" | $(find arm_segger_* -name "install_segger*") --copy-files-to /ses
+RUN rm ses.tar.gz
+RUN rm -rf segger
